@@ -1,0 +1,38 @@
+{
+  "name": "backendapi",
+  "version": "1.0.0",
+  "description": "This project contains endpoints for signin , signup , getprofile and logout ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Nishchal-Tiwari/lens-restful-api.git"
+  },
+  "keywords": [
+    "restfulapi",
+    "backend",
+    "node.js",
+    "authorization"
+  ],
+  "author": "Nishchal Tiwari",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Nishchal-Tiwari/lens-restful-api/issues"
+  },
+  "homepage": "https://github.com/Nishchal-Tiwari/lens-restful-api#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.20.2",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.4.0",
+    "swagger-ui-express": "^5.0.0",
+    "yamljs": "^0.3.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.2"
+  }
+}

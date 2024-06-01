@@ -5,11 +5,15 @@ const authRoutes = require('./routes/authRoutes');
 require('dotenv').config();
 const swaggerUi = require('swagger-ui-express');
 const YAML = require('yamljs');
+const xss = require('xss-clean');
 const app = express();
 
 connectDB();
 
+//It is used to parse user input basically in PUT and POST requests
 app.use(bodyParser.json());
+//For sanitizing user input from client side
+app.use(xss());
 
 // Configuration for swagger-ui
 const swaggerDocument = YAML.load('./api-doc.yml');
@@ -28,3 +32,6 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
+
+
+module.exports = app;

@@ -19,6 +19,7 @@
     PORT=5000
     MONGO_URI=mongodb://localhost:27017/userAuthDB
     JWT_SECRET=your_jwt_secret_key
+    REDIS_URL=your_redis_db_uri
     ```
 
 4. Run the application:

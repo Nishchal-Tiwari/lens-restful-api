@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
+const redisClient = require('../config/redisClient'); 
 require('dotenv').config();
 
 const protect = async (req, res, next) => {
@@ -10,7 +11,10 @@ const protect = async (req, res, next) => {
       token = req.headers.authorization.split(' ')[1];
 
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
+      const tokenValid = await redisClient.get(token);
+      if (!tokenValid) {
+        return res.status(401).json({ message: 'Not authorized, token invalid' });
+      }
       req.user = await User.findById(decoded.id).select('-password');
 
       next();

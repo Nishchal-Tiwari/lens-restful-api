@@ -7,9 +7,16 @@ const swaggerUi = require('swagger-ui-express');
 const YAML = require('yamljs');
 const xss = require('xss-clean');
 const app = express();
-
+const client = require('./config/redisClient')
 connectDB();
+client.on('error', (err) => {
+console.error('Redis error:', err);
+});
+client.on('connect', () => {
+console.log('Connected to Redis');
+});
 
+client.connect();
 //It is used to parse user input basically in PUT and POST requests
 app.use(bodyParser.json());
 //For sanitizing user input from client side

@@ -1,9 +1,12 @@
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
+const redisClient = require('../config/redisClient'); 
 
-const generateToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: '30d' });
+const generateToken = async  (id) => {
+  const token= jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: '15m' });
+  await redisClient.set(token, 'valid', { EX: 15 * 60 });
+  return token;
 };
 
 const registerUser = async (req, res) => {
@@ -26,7 +29,7 @@ const registerUser = async (req, res) => {
       _id: user._id,
       username: user.username,
       email: user.email,
-      token: generateToken(user._id),
+      token: await generateToken(user._id),
     });
   } else {
     res.status(400).json({ message: 'Invalid user data' });
@@ -43,17 +46,24 @@ const authUser = async (req, res) => {
       _id: user._id,
       username: user.username,
       email: user.email,
-      token: generateToken(user._id),
+      token: await generateToken(user._id),
     });
   } else {
     res.status(401).json({ message: 'Invalid email or password' });
   }
 };
 
-const logoutUser = (req, res) => {
+// Logout User 
+const logoutUser = async (req, res) => {
+  const token = req.headers.authorization.split(' ')[1];
+
+  // Remove the token from Redis
+  await redisClient.del(token);
+
   res.json({ message: 'User logged out successfully' });
 };
 
+//Get User Profile 
 const getUserProfile = async (req, res) => {
   const user = await User.findById(req.user._id);
 

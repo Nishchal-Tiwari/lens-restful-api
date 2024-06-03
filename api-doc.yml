@@ -174,6 +174,16 @@ paths:
                   message:
                     type: string
                     example: User not found
+        '401':
+          description: Token Invalidated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Invalid Token
 components:
   securitySchemes:
     bearerAuth:
@@ -193,10 +203,10 @@ components:
           example: 60c72b2f9b1d8c001c8e4f8b
         username:
           type: string
-          example: johndoe
+          example: employee
         email:
           type: string
-          example: johndoe@example.com
+          example: employee@lenscorp.com
         password:
           type: string
-          example: password123
+          example: lens_employee

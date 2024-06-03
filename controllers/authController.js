@@ -2,14 +2,30 @@ const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 const redisClient = require('../config/redisClient'); 
+const Joi = require('joi')
 
 const generateToken = async  (id) => {
   const token= jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: '15m' });
   await redisClient.set(token, 'valid', { EX: 15 * 60 });
   return token;
 };
+const registerSchema = Joi.object({
+  username: Joi.string().min(3).max(30).required(),
+  email: Joi.string().email().required(),
+  password: Joi.string().min(6).required(),
+});
+
+const authSchema = Joi.object({
+  email: Joi.string().email().required(),
+  password: Joi.string().min(6).required(),
+});
+
 
 const registerUser = async (req, res) => {
+  const { error } = registerSchema.validate(req.body);
+  if (error) {
+    return res.status(400).json({ message: error.details[0].message });
+  }
   const { username, email, password } = req.body;
 
   const userExists = await User.findOne({ email });
@@ -37,6 +53,10 @@ const registerUser = async (req, res) => {
 };
 
 const authUser = async (req, res) => {
+  const { error } = authSchema.validate(req.body);
+  if (error) {
+    return res.status(400).json({ message: error.details[0].message });
+  }
   const { email, password } = req.body;
 
   const user = await User.findOne({ email });

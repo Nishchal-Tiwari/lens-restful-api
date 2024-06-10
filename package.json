@@ -4,6 +4,7 @@
   "description": "This project contains endpoints for signin , signup , getprofile and logout ",
   "main": "index.js",
   "scripts": {
+    "start": "node index.js",
     "test": "jest"
   },
   "repository": {
